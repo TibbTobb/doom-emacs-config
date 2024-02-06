@@ -269,3 +269,6 @@
 (after! lsp-clangd (set-lsp-priority! 'clangd 2))
 
 (after! magit (remove-hook `magit-status-sections-hook `magit-insert-stashes) (remove-hook `magit-status-sections-hook `magit-tags-header))
+
+(after! dap-mode
+  (setq dap-python-debugger 'debugpy))
