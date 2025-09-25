@@ -1,17 +1,91 @@
-;;; .doom.d/config.el -*- lexical-binding: t; -*-
+;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
 
-;; Place your private configuration here
+;; Place your private configuration here! Remember, you do not need to run 'doom
+;; sync' after modifying this file!
+
+
+;; Some functionality uses this to identify you, e.g. GPG configuration, email
+;; clients, file templates and snippets. It is optional.
+;; (setq user-full-name "John Doe"
+;;       user-mail-address "john@doe.com")
+
+;; Doom exposes five (optional) variables for controlling fonts in Doom:
 ;;
+;; - `doom-font' -- the primary font to use
+;; - `doom-variable-pitch-font' -- a non-monospace font (where applicable)
+;; - `doom-big-font' -- used for `doom-big-font-mode'; use this for
+;;   presentations or streaming.
+;; - `doom-symbol-font' -- for symbols
+;; - `doom-serif-font' -- for the `fixed-pitch-serif' face
+;;
+;; See 'C-h v doom-font' for documentation and more examples of what they
+;; accept. For example:
+;;
+;;(setq doom-font (font-spec :family "Fira Code" :size 12 :weight 'semi-light)
+;;      doom-variable-pitch-font (font-spec :family "Fira Sans" :size 13))
+;;
+;; If you or Emacs can't find your font, use 'M-x describe-font' to look them
+;; up, `M-x eval-region' to execute elisp code, and 'M-x doom/reload-font' to
+;; refresh your font settings. If Emacs still can't find your font, it likely
+;; wasn't installed correctly. Font issues are rarely Doom issues!
+
+;; There are two ways to load a theme. Both assume the theme is installed and
+;; available. You can either set `doom-theme' or manually load a theme with the
+;; `load-theme' function. This is the default:
+(setq doom-theme 'doom-one)
+
+;; This determines the style of line numbers in effect. If set to `nil', line
+;; numbers are disabled. For relative line numbers, set this to `relative'.
+(setq display-line-numbers-type nil)
+
+;; If you use `org' and don't want your org files in the default location below,
+;; change `org-directory'. It must be set before org loads!
+(setq org-directory "~/org/")
+
+
+;; Whenever you reconfigure a package, make sure to wrap your config in an
+;; `after!' block, otherwise Doom's defaults may override your settings. E.g.
+;;
+;;   (after! PACKAGE
+;;     (setq x y))
+;;
+;; The exceptions to this rule:
+;;
+;;   - Setting file/directory variables (like `org-directory')
+;;   - Setting variables which explicitly tell you to set them before their
+;;     package is loaded (see 'C-h v VARIABLE' to look up their documentation).
+;;   - Setting doom variables (which start with 'doom-' or '+').
+;;
+;; Here are some additional functions/macros that will help you configure Doom.
+;;
+;; - `load!' for loading external *.el files relative to this one
+;; - `use-package!' for configuring packages
+;; - `after!' for running code after a package has loaded
+;; - `add-load-path!' for adding directories to the `load-path', relative to
+;;   this file. Emacs searches the `load-path' when you load packages with
+;;   `require' or `use-package'.
+;; - `map!' for binding new keys
+;;
+;; To get information about any of these functions/macros, move the cursor over
+;; the highlighted symbol at press 'K' (non-evil users must press 'C-c c k').
+;; This will open documentation for it, including demos of how they are used.
+;; Alternatively, use `C-h o' to look up a symbol (functions, variables, faces,
+;; etc).
+;;
+;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
+;; they are implemented.
+
 ;;lsp settings
-(setq lsp-ui-sideline-enable nil
-      lsp-ui-doc-enable nil
-      lsp-enable-on-type-formatting nil
-      lsp-enable-symbol-highlighting t
-      ;; lsp-enable-file-watchers nil
-      ;; lsp-auto-guess-root t
-      lsp-file-watch-threshold 20000
-      display-line-numbers-type nil
-      mode-line-default-help-echo nil
+;; (setq  lsp-ui-sideline-enable nil
+;;        lsp-ui-doc-enable nil
+;;        lsp-enable-on-type-formatting nil
+;; lsp-enable-symbol-highlighting t
+;; lsp-enable-file-watchers nil
+;; lsp-auto-guess-root t
+;; lsp-file-watch-threshold 20000
+;; )
+
+(setq mode-line-default-help-echo nil
       show-help-function nil
       doom-modeline-vcs-max-length 24
       doom-modeline-env-version nil
@@ -21,12 +95,20 @@
       gdb-many-windows 1
       magit-save-repository-buffers nil
       magit-inhibit-save-previous-winconf t
-      ccls-args '("-log-file=/tmp/ccls.log" "-v=1")
+      ;; ccls-args '("-log-file=/tmp/ccls.log" "-v=1")
       ;; projectile-require-project-root t
       )
 
+(setq ;doom-theme 'doom-dracula
+ doom-font (font-spec :family "JetBrainsMono" :size 12 :weight 'light)
+ doom-variable-pitch-font (font-spec :family "DejaVu Sans" :size 13))
 
-;; (which-function-mode 1)
+;; (add-hook! python-mode
+;;  (setq flycheck-check-syntax-automatically '(mode-enabled save))
+;;  python-shell-interpreter "python")
+
+;; (after! 'lsp-pyright
+;;   (setq lsp-pyright-multi-root nil))
 
 (after! ivy
   ;; I prefer search matching to be ordered; it's more precise
@@ -36,116 +118,18 @@
 (setq evil-split-window-below t
       evil-vsplit-window-right t)
 
-;; Implicit /g flag on evil ex substitution, because I less often want the
-;; default behavior.
+;; Implicit /g flay on evil ex substitution, because I less often want the
+;; default behaviour.
 (setq evil-ex-substitute-global t)
 
-;; UI
-;; (setq doom-font (font-spec :family "monospace" :size 12 :weight 'semi-light)
-;;       doom-variable-pitch-font (font-spec :family "sans"))
-;; (setq doom-theme 'doom-dracula)
-
-; (setq doom-font (font-spec :family "JetBrainsMono" :size 12 :weight 'light)
-;       doom-variable-pitch-font (font-spec :family "Noto Serif" :size 13)
-;       ivy-posframe-font (font-spec :family "JetBrainsMono" :size 15))
-
-(setq ;doom-theme 'doom-dracula
-      doom-font (font-spec :family "JetBrainsMono" :size 12 :weight 'light)
-      doom-variable-pitch-font (font-spec :family "DejaVu Sans" :size 13))
-
-(add-hook! python-mode
-  (setq flycheck-check-syntax-automatically '(mode-enabled save))
-  python-shell-interpreter "python")
-
-(require 'ccls)
-(setq ccls-executable "/usr/local/bin/ccls"
-      ccls-sem-highlight-method 'font-lock)
-;; (setq ccls-initialization-options `(:index (:multiVersion 1 :threads 2)))
-;; (setq ccls-initialization-options (append ccls-initialization-options `(:index (:initialBlacklist [".*"]))))
-;; (setq ccls-initialization-options `(:index (:threads 1 :initialBlacklist ["."])))
-;; (setq ccls-initialization-options `(:index (:trackDependency 1 :threads 2 :initialBlacklist [".*gcc.*testsuite.*"])))
-(setq ccls-initialization-options `(:clang (:resourceDir "/usr/lib/llvm-11/lib/clang/11.1.0/") :index (:multiVersion 1 :multiVersionBlacklist ["^/usr/include"] :trackDependency 2 :threads 0 :initialBlacklist [".*gcc.*testsuite.*"  ".*undo.?/release.*" ".*undo.?/tests.*" ".*undo.*build-tmp.*" ".*undo.?/examples" ".*undo.*yabs"])))
-;; (setq ccls-initialization-options `(:index (:multiVersion 1 :multiVersionBlacklist ["^/usr/include"] :trackDependency 2 :threads 0 :initialBlacklist [".*gcc.*testsuite.*"  ".*undo.?/release.*" ".*undo.?/tests.*" ".*undo.*build-tmp.*" ".*undo.?/examples" ".*undo.*yabs"])))
-;; (setq ccls-initialization-options `(:index (:multiVersion 1 :multiVersionBlacklist ["^/usr/include"] :threads 2 :initialWhitelist ["undo/src" "gcc"] :initialBlacklist [".*gcc.*testsuite.*"])))
-;;
-(require 'lsp-pyright)
-(setq lsp-pyright-multi-root nil)
-
-;; (advice-add 'lsp :before (lambda (&rest _args) (eval '(setf (lsp-session-server-id->folders (lsp-session)) (ht)))))
 
 
-;; (require 'ccls)
-;; (ccls-use-default-rainbow-sem-highlight)
-
-;; (require 'flycheck)
-;; (flycheck-define-checker undo-python
-;;   "Pylint wrapper to run Undo python linters"
-;;   :command ("/home/tlloyddavies/undo/users/mbarisione/scripts/pylint-wrap" ;"--msg-template='{path}:{line}:{msg}'")
-;;                                         ;:command ("scripts/run-pylint"
-;;                                         ;
-;;             "--no-black"
-;;             ;; "--reports=n"
-;;             ;; "--output-format=text"
-;;             ;; "--msg-template={path}:{line}:{column}: {msg_id} ({symbol}) {msg}"
-;;                                         ;"--msg-template={abspath}:{line}:{msg}"
-;;             ;; "--msg-template={abspath}:{line}:{C}:{msg_id}:{msg}"
-;;                                         source-inplace)
-;;             ;; source-)
-;;   :predicate flycheck-buffer-saved-p
-;;   ;; :error-patterns
-;;   ;; ((error line-start (file-name) ":" line ":" (message) line-end))
-;;   ;; :error-filter
-;;   ;; (lambda (errors)
-;;   ;;   (flycheck-sanitize-errors (flycheck-increment-error-columns errors)))
-;;   :error-patterns
-;;   ((error line-start (file-name) ":" line ":" column ":" (message) line-end))
-;;   ;; ((error line-start (file-name) ":" line ":"
-;;   ;;         (or "E" "F") ":"
-;;   ;;         (id (one-or-more (not (any ":")))) ":"
-;;   ;;         (message) line-end)
-;;   ;;  (warning line-start (file-name) ":" line ":"
-;;   ;;           (or "W" "R") ":"
-;;   ;;           (id (one-or-more (not (any ":")))) ":"
-;;   ;;           (message) line-end)
-;;   ;;  (info line-start (file-name) ":" line ":"
-;;   ;;        (or "C" "I") ":"
-;;   ;;        (id (one-or-more (not (any ":")))) ":"
-;;   ;;        (message) line-end))
-;;   :modes python-mode
-;;   :next-checkers (lsp)
-;;   )
-
-(require 'dap-python)
-(setq dap-python-debugger `debugpy)
-(require 'dap-cpptools)
-
-
-(setq flycheck-cppcheck-standards '("c99")
-      flycheck-cppcheck-suppressions-file "/home/tlloyddavies/undo/scripts/static_analysis/c/cppcheck-suppress.xml"
-      flycheck-cppcheck-checks nil)
-
-;; (add-to-list 'default-frame-alist '(inhibit-double-buffering . t))
-
-;; (require 'lsp-ui)
-;; (defun my-flycheck-setup ()
-;;   (when (equal major-mode 'python-mode)
-;;     (add-to-list 'flycheck-checkers 'undo-python)
-;;     (setq-local flycheck-checker 'undo-python)))
-
-;; These MODE-local-vars-hook hooks are a Doom thing. They're executed after
-;; MODE-hook, on hack-local-variables-hook. Although `lsp!` is attached to
-;; python-mode-local-vars-hook, it should occur earlier than my-flycheck-setup
-;; this way:
-;; (add-hook 'hack-local-variables-hook #'my-flycheck-setup 1)
-
-(setq-default indent-tabs-mode nil)
-
-(defun indent-tabs-mode-nil-hook ()
-    (setq-default indent-tabs-mode nil))
-
-(add-hook 'c++-mode-hook 'indent-tabs-mode-nil-hook)
-(add-hook 'c-mode-hook 'indent-tabs-mode-nil-hook)
-(add-hook 'python-mode-hook 'indent-tabs-mode-nil-hook)
+;; (setq-default indent-tabs-mode nil)
+;; (defun indent-tabs-mode-nil-hook ()
+;;  (setq-default indent-tabs-mode nil))
+;; (add-hook 'c++-mode-hook 'indent-tabs-mode-nil-hook)
+;; (add-hook 'c-mode-hook 'indent-tabs-mode-nil-hook)
+;; (add-hook 'python-mode-hook 'indent-tabs-mode-nil-hook)
 
 (c-add-style "undo" '("linux"
                       (c-basic-offset . 4)
@@ -156,73 +140,63 @@
 (setf (alist-get 'c++-mode c-default-style) "undo")
 (setf (alist-get 'groovy-mode c-default-style) "undo")
 
-(setq gdb-non-stop-setting nil)
+;; (appendq! doom-projectile-cache-blacklist '("~/undo.?/3rd_party"))
+;; (appendq! projectile-globally-ignored-directories '("~/undo.?/3rd_party"))
+;; (setq projectile-globally-ignored-file-suffixes '(".d", ".po", ".ccache*", ".o", ".a"))
+;; (after! lsp-mode
+;;   (appendq! lsp-file-watch-ignored-directories '("undo.?/3rd_party"
+;;                                                  "undo.?/artifacts"
+;;                                                  "undo.?/users"
+;;                                                  "undo.?/tests/test"
+;;                                                  "undo.?/tests/cases"
+;;                                                  "undo.?/tests/customer_applications"
+;;                                                  "undo.*test_artifacts"
+;;                                                  "undo.?/tests/pytest"
+;;                                                  "undo.?/release.*"
+;;                                                  "undo.?/python-test-deps"
+;;                                                  "undo.?/release"
+;;                                                  "undo.?/oldrelease"
+;;                                                  "undo.?/infra"
+;;                                                  "undo.?/examples" "undo.?/docs"
+;;                                                  "undo.?/build-tmp.*"
+;;                                                  "undo.?/\\.mypy_cache"
+;;                                                  "undo.?/\\.pytest_cache"
+;;                                                  "undo.?/scripts" "undo.?/_yabs"
+;;                                                  "undo.?/build"
+;;                                                  "undo.?/private"
+;;                                                  "undo.?/aws"
+;;                                                  "gcc.?/.*/testsuite"
+;;                                                  "undo.?/plugins"
+;;                                                  "undo.?/src/experimental"
+;;                                                  "undo.?/package_gdb"
+;;                                                  "undo.?/logs" ".ccls-cache"
+;;                                                  ".git"
+;;                                                  ".mypy_cache"
+;;                                                  "_yabs")))
 
-(setq-default flycheck-disabled-checkers '(groovy))
 
-(defun disable-flycheck-in-groovy ()
-  (flycheck-mode -1))
 
-(add-hook 'groovy-mode-hook 'disable-flycheck-in-groovy)
+;; (map! :after lsp-ui-peek
+;;       :map lsp-ui-peek-mode-map
+;;       "h" #'lsp-ui-peek--select-prev-file
+;;       "C-h" #'lsp-ui-peek--select-prev-file
+;;       "j" #'lsp-ui-peek--select-next
+;;       "C-j" #'lsp-ui-peek--select-next
+;;       "k" #'lsp-ui-peek--select-prev
+;;       "C-k" #'lsp-ui-peek--select-prev
+;;       "l" #'lsp-ui-peek--select-next-file
+;;       "C-l" #'lsp-ui-peek--select-next-file
+;;       )
 
-(appendq! doom-projectile-cache-blacklist '("~/undo/3rd_party" "~/undo2/3rd_party"))
-(appendq! projectile-globally-ignored-directories '("~/undo/3rd_party" "~/undo2/3rd_party"))
-;; (appendq! lsp-file-watch-ignored '("undo.?/3rd_party" "undo.?/artifacts" "undo.?/users" "undo.?/tests/test" "undo.?/release.*" "undo.?/python-test-deps" "undo.?/oldrelease" "undo.?/infra" "undo.?/examples" "undo.?/docs" "undo.?/build-tmp.*" "undo.?/\\.mypy_cache" "undo.?/\\.pytest_cache" "undo.?/scripts" "undo.?/_yabs" "undo.?/build" "gcc.?/.*/testsuite"))
-(appendq! lsp-file-watch-ignored-directories '("undo.*3rd_party" "undo.?/artifacts" "undo.?/users" "undo.?/tests/test" "undo.?/tests/cases" "undo.?/tests/customer_applications" "undo.*test_artifacts" "undo.?/tests/pytest" "undo.?/release.*" "undo.?/python-test-deps" "undo.?/release" "undo.?/oldrelease" "undo.?/infra" "undo.?/examples" "undo.?/docs" "undo.?/build-tmp.*" "undo.?/\\.mypy_cache" "undo.?/\\.pytest_cache" "undo.?/scripts" "undo.?/_yabs" "undo.?/build" "gcc.?/.*/testsuite" "undo.?/plugins" "undo.?/src/experimental" "undo.?/package_gdb" "undo.?/logs" ".ccls-cache" ".git" ".mypy_cache" "_yabs"))
+;; (setq lsp-clients-clangd-args '("-j=3"
+;;                                 "--background-index"
+;;                                 "--clang-tidy"
+;;                                 "--completion-style=detailed"
+;;                                 "--header-insertion=iwyu"
+;;                                 ))
+;; (after! lsp-clangd (set-lsp-priority! 'clangd 2))
 
-;; (require 'forge)
-;; (add-to-list 'forge-alist '("git.undoers.io" "git.undoers.io/api/v3" "git.undoers.io" forge-github-repository))
-
-(require 'so-long)
-(add-to-list 'so-long-minor-modes 'clang-format+-mode)
-
-;; (add-hook 'c-mode-common-hook #'clang-format+-mode)
-;; (setq clang-format+-context 'modification)
-
-(fset 'c-indent-region 'clang-format-region)
-
-(require 'company)
-(setq company-global-modes t)
-
-;; (cl-pushnew 'company-tabnine (default-value 'company-backends))
-(map! :after lsp-ui-peek
-      :map lsp-ui-peek-mode-map
-      "h" #'lsp-ui-peek--select-prev-file
-      "C-h" #'lsp-ui-peek--select-prev-file
-      "j" #'lsp-ui-peek--select-next
-      "C-j" #'lsp-ui-peek--select-next
-      "k" #'lsp-ui-peek--select-prev
-      "C-k" #'lsp-ui-peek--select-prev
-      "l" #'lsp-ui-peek--select-next-file
-      "C-l" #'lsp-ui-peek--select-next-file
-      )
-
-;; (defvar gud-overlay
-;;   (let* ((ov (make-overlay (point-min) (point-min))))
-;;     (overlay-put ov 'face 'secondary-selection)
-;;     ov)
-;;   "Overlay variable for GUD highlighting.")
-
-;; (defadvice gud-display-line (after my-gud-highlight act)
-;;   "Highlight current line."
-;;   (let* ((ov gud-overlay)
-;;          (bf (gud-find-file true-file)))
-;;     (with-current-buffer bf
-;;       (move-overlay ov (line-beginning-position) (line-beginning-position 2)
-;;                     ;;(move-overlay ov (line-beginning-position) (line-end-position)
-;;                     (current-buffer)))))
-;; (defun gud-kill-buffer ()
-;;   (if (derived-mode-p 'gud-mode)
-;;       (delete-overlay gud-overlay)))
-
-;; (add-hook 'kill-buffer-hook 'gud-kill-buffer)
-
-(setq +format-on-save-enabled-modes
-'(not c++-mode c-mode emacs-lisp-mode sql-mode tex-mode latex-mode yaml-mode json-mode))
-
-(fmakunbound 'gdb)
-(fmakunbound 'gdb-enable-debug)
-
+;; (after! cc-mode (set-eglot-client! 'cc-mode '("clangd" "-j=3" "--background-index" "--clang-tidy" "--completion-style=detailed" "--header-insertion=iwyu")))
 
 (defun magit-process-apply-force-or-cancel-prompt-hook (proc str)
   "Hook method to handle STR in magit process filter with PROC."
@@ -254,21 +228,305 @@
 (add-hook 'magit-process-prompt-functions
 	  #'magit-process-apply-force-or-cancel-prompt-hook)
 
-;; (add-hook `git-commit-setup-hook
-;;       git-commit-summary-max-length 72)
+;; (setq flycheck-cppcheck-standards '("c99")
+;;      flycheck-cppcheck-suppressions-file "/home/tlloyddavies/undo/scripts/static_analysis/c/cppcheck-suppress.xml"
+;;      flycheck-cppcheck-checks nil)
 
-(use-package undo-io :load-path "undo-io")
-(use-package undo-io-cloud :load-path "undo-io/cloud")
+;; (setq-default flycheck-disabled-checkers '(groovy))
 
-(setq lsp-clients-clangd-args '("-j=3"
-                                "--background-index"
-                                "--clang-tidy"
-                                "--completion-style=detailed"
-                                "--header-insertion=iwyu"
-                                ))
-(after! lsp-clangd (set-lsp-priority! 'clangd 2))
+;; (defun disable-flycheck-in-groovy ()
+;;  (flycheck-mode -1))
 
-(after! magit (remove-hook `magit-status-sections-hook `magit-insert-stashes) (remove-hook `magit-status-sections-hook `magit-tags-header))
+;; (add-hook 'groovy-mode-hook 'disable-flycheck-in-groovy)
 
-(after! dap-mode
-  (setq dap-python-debugger 'debugpy))
+;; (fset 'c-indent-region 'clang-format-region)
+
+(after! format
+  (setq +format-on-save-disabled-modes
+        '(c++-mode c-mode emacs-lisp-mode sql-mode tex-mode latex-mode yaml-mode json-mode rst-mode)))
+(use-package! apheleia)
+
+(defun run-projectile-invalidate-cache (&rest _args)
+  ;; We ignore the args to `magit-checkout'.
+  (projectile-invalidate-cache nil))
+(advice-add 'magit-checkout
+            :after #'run-projectile-invalidate-cache)
+(advice-add 'magit-branch-and-checkout ; This is `b c'.
+            :after #'run-projectile-invalidate-cache)
+
+;; (use-package! eglot-booster
+;;   :after eglot
+;;   :config (eglot-booster-mode))
+
+(after! eglot
+  (add-to-list 'eglot-server-programs
+               '(meson-mode . ("mesonlsp" "--lsp"))))
+
+(add-hook 'meson-mode-hook 'eglot-ensure)
+
+;; (after! eglot
+;;   (add-to-list 'eglot-server-programs
+;;     '(js-mode
+;;      . ("vtsls" "--stdio"))))
+
+;; (after! eglot
+;;   (add-to-list 'eglot-server-programs
+;;       '(js-ts-mode
+;;      . ("vtsls" "--stdio"))))
+
+;; (after! eglot
+;;   (add-to-list 'eglot-server-programs
+;;       '(tsx-ts-mode
+;;      . ("vtsls" "--stdio"))))
+
+;; (after! eglot
+;;   (add-to-list 'eglot-server-programs
+;;       '(typescript-ts-mode
+;;      . ("vtsls" "--stdio"))))
+
+;; (after! eglot
+;;   (add-to-list 'eglot-server-programs
+;;       '(typescript-mode
+;;      . ("vtsls" "--stdio"))))
+
+;; (use-package! eglot
+;;   :ensure t
+;;   :hook ((python-mode python-ts-mode) . eglot-ensure)
+;;   :config
+;;   (add-to-list 'eglot-server-programs
+;;     `((python-ts-mode python-mode) . ("pyrefly" "lsp"))))
+
+;; (after! eglot
+;;   (add-to-list 'eglot-server-programs
+;;       '(python-ts-mode python-mode eglot-semtok-server "basedpyright-langserver" "--stdio")))
+
+(use-package! eglot
+  :ensure t
+  :hook ((python-mode python-ts-mode) . eglot-ensure)
+  :config
+  (add-to-list 'eglot-server-programs
+    `((python-ts-mode python-mode) . (eglot-semtok-server "basedpyright-langserver" "--stdio"))))
+
+(use-package! eglot
+  :ensure t
+  :hook ((c-mode c-ts-mode c++-mode c++-ts-mode objc-mode) . eglot-ensure)
+  :config
+  (add-to-list 'eglot-server-programs
+    `((c-mode c-ts-mode c++-mode c++-ts-mode objc-mode)
+     . (eglot-semtok-server "clangd" "-j=3" "--background-index" "--clang-tidy" "--completion-style=detailed" "--header-insertion=iwyu"))))
+
+(defface lsp-face-semhl-constant
+  '((t :inherit font-lock-constant-face))
+  "Face used for semantic highlighting scopes matching constant scopes."
+  :group 'lsp-semantic-tokens)
+
+(defface lsp-face-semhl-variable
+  '((t :inherit font-lock-variable-name-face))
+  "Face used for semantic highlighting scopes matching variable.*.
+Unless overridden by a more specific face association."
+  :group 'lsp-semantic-tokens)
+
+(defface lsp-face-semhl-function
+  '((t :inherit font-lock-function-name-face))
+  "Face used for semantic highlighting scopes matching entity.name.function.*.
+Unless overridden by a more specific face association."
+  :group 'lsp-semantic-tokens)
+
+(defface lsp-face-semhl-method
+  '((t :inherit lsp-face-semhl-function))
+  "Face used for semantic highlighting scopes matching entity.name.method.*.
+Unless overridden by a more specific face association."
+  :group 'lsp-semantic-tokens)
+
+(defface lsp-face-semhl-namespace
+  '((t :inherit font-lock-type-face :weight bold))
+  "Face used for semantic highlighting scopes matching entity.name.namespace.*.
+Unless overridden by a more specific face association."
+  :group 'lsp-semantic-tokens)
+
+(defface lsp-face-semhl-comment
+  '((t (:inherit font-lock-comment-face)))
+  "Face used for comments."
+  :group 'lsp-semantic-tokens)
+
+(defface lsp-face-semhl-keyword
+  '((t (:inherit font-lock-keyword-face)))
+  "Face used for keywords."
+  :group 'lsp-semantic-tokens)
+
+(defface lsp-face-semhl-string
+  '((t (:inherit font-lock-string-face)))
+  "Face used for keywords."
+  :group 'lsp-semantic-tokens)
+
+(defface lsp-face-semhl-number
+  '((t (:inherit font-lock-constant-face)))
+  "Face used for numbers."
+  :group 'lsp-semantic-tokens)
+
+(defface lsp-face-semhl-regexp
+  '((t (:inherit font-lock-string-face :slant italic)))
+  "Face used for regexps."
+  :group 'lsp-semantic-tokens)
+
+(defface lsp-face-semhl-operator
+  '((t (:inherit font-lock-function-name-face)))
+  "Face used for operators."
+  :group 'lsp-semantic-tokens)
+
+(defface lsp-face-semhl-namespace
+  '((t (:inherit font-lock-keyword-face)))
+  "Face used for namespaces."
+  :group 'lsp-semantic-tokens)
+
+(defface lsp-face-semhl-type
+  '((t (:inherit font-lock-type-face)))
+  "Face used for types."
+  :group 'lsp-semantic-tokens)
+
+(defface lsp-face-semhl-struct
+  '((t (:inherit font-lock-type-face)))
+  "Face used for structs."
+  :group 'lsp-semantic-tokens)
+
+(defface lsp-face-semhl-class
+  '((t (:inherit font-lock-type-face)))
+  "Face used for classes."
+  :group 'lsp-semantic-tokens)
+
+(defface lsp-face-semhl-interface
+  '((t (:inherit font-lock-type-face)))
+  "Face used for interfaces."
+  :group 'lsp-semantic-tokens)
+
+(defface lsp-face-semhl-enum
+  '((t (:inherit font-lock-type-face)))
+  "Face used for enums."
+  :group 'lsp-semantic-tokens)
+
+(defface lsp-face-semhl-type-parameter
+  '((t (:inherit font-lock-type-face)))
+  "Face used for type parameters."
+  :group 'lsp-semantic-tokens)
+
+;; function face already defined, move here when support
+;; for theia highlighting gets removed
+(defface lsp-face-semhl-member
+  '((t (:inherit font-lock-variable-name-face)))
+  "Face used for members."
+  :group 'lsp-semantic-tokens)
+
+(defface lsp-face-semhl-property
+  '((t (:inherit font-lock-variable-name-face)))
+  "Face used for properties."
+  :group 'lsp-semantic-tokens)
+
+(defface lsp-face-semhl-event
+  '((t (:inherit font-lock-variable-name-face)))
+  "Face used for event properties."
+  :group 'lsp-semantic-tokens)
+
+(defface lsp-face-semhl-macro
+  '((t (:inherit font-lock-preprocessor-face)))
+  "Face used for macros."
+  :group 'lsp-semantic-tokens)
+
+(defface lsp-face-semhl-variable
+  '((t (:inherit font-lock-variable-name-face)))
+  "Face used for variables."
+  :group 'lsp-semantic-tokens)
+
+(defface lsp-face-semhl-parameter
+  '((t (:inherit font-lock-variable-name-face)))
+  "Face used for parameters."
+  :group 'lsp-semantic-tokens)
+
+(defface lsp-face-semhl-label
+  '((t (:inherit font-lock-comment-face)))
+  "Face used for labels."
+  :group 'lsp-semantic-tokens)
+
+(defface lsp-face-semhl-deprecated
+  '((t :strike-through t))
+  "Face used for semantic highlighting scopes matching constant scopes."
+  :group 'lsp-semantic-tokens)
+
+(defface lsp-face-semhl-definition
+  '((t :inherit font-lock-function-name-face :weight bold))
+  "Face used for definition modifier."
+  :group 'lsp-semantic-tokens)
+
+(defface lsp-face-semhl-implementation
+  '((t :inherit font-lock-function-name-face :weight bold))
+  "Face used for implementation modifier."
+  :group 'lsp-semantic-tokens)
+
+(defface lsp-face-semhl-default-library
+  '((t :inherit font-lock-builtin-face))
+  "Face used for defaultLibrary modifier."
+  :group 'lsp-semantic-tokens)
+
+(defface lsp-face-semhl-static
+  '((t :inherit font-lock-keyword-face))
+  "Face used for static modifier."
+  :group 'lsp-semantic-tokens)
+
+(after! eglot-semtok (setq eglot-semtok-faces
+  '(("comment" . lsp-face-semhl-comment)
+    ("keyword" . lsp-face-semhl-keyword)
+    ("string" . lsp-face-semhl-string)
+    ("number" . lsp-face-semhl-number)
+    ("regexp" . lsp-face-semhl-regexp)
+    ("operator" . lsp-face-semhl-operator)
+    ("namespace" . lsp-face-semhl-namespace)
+    ("type" . lsp-face-semhl-type)
+    ("struct" . lsp-face-semhl-struct)
+    ("class" . lsp-face-semhl-class)
+    ("interface" . lsp-face-semhl-interface)
+    ("enum" . lsp-face-semhl-enum)
+    ("typeParameter" . lsp-face-semhl-type-parameter)
+    ("function" . lsp-face-semhl-function)
+    ("method" . lsp-face-semhl-method)
+    ("member" . lsp-face-semhl-member)
+    ("property" . lsp-face-semhl-property)
+    ("event" . lsp-face-semhl-event)
+    ("macro" . lsp-face-semhl-macro)
+    ("variable" . lsp-face-semhl-variable)
+    ("parameter" . lsp-face-semhl-parameter)
+    ("label" . lsp-face-semhl-label)
+    ("enumConstant" . lsp-face-semhl-constant)
+    ("enumMember" . lsp-face-semhl-constant)
+    ("dependent" . lsp-face-semhl-type)
+    ("concept" . lsp-face-semhl-interface))))
+
+(after! eglot-semtok (setq eglot-semtok-modifier-faces
+  '(("declaration" . lsp-face-semhl-interface)
+    ("definition" . lsp-face-semhl-definition)
+    ("implementation" . lsp-face-semhl-implementation)
+    ("readonly" . lsp-face-semhl-constant)
+    ("static" . lsp-face-semhl-static)
+    ("deprecated" . lsp-face-semhl-deprecated)
+    ("abstract" . lsp-face-semhl-keyword)
+    ("async" . lsp-face-semhl-macro)
+    ("modification" . lsp-face-semhl-operator)
+    ("documentation" . lsp-face-semhl-comment)
+    ("defaultLibrary" . lsp-face-semhl-default-library))))
+
+;; (after! eglot-semtok (add-to-list 'eglot-semtok-modifier-faces '("builtin" . font-lock-builtin-face)))
+;; (after! eglot-semtok (add-to-list 'eglot-semtok-faces '("clsParameter" . font-lock-type-face)))
+;; (after! eglot-semtok (add-to-list 'eglot-semtok-faces '("selfParameter" . font-lock-type-face)))
+;; (after! eglot-semtok (add-to-list 'eglot-semtok-faces '("concept" . font-lock-type-face)))
+;; (after! eglot-semtok (add-to-list 'eglot-semtok-faces '("label" . font-lock-comment-face)))
+
+;; (after! eglot-semtok (add-to-list 'eglot-semtok-faces '("namespace" . font-lock-variable-name-face)))
+
+(after! magit
+  (setq magit-revision-show-gravatars '("^Author:     " . "^Commit:     ")))
+
+(setq auth-sources '("~/.authinfo"))
+
+(after! forge (push '("git.undoers.io"               ; GITHOST
+                      "git.undoers.io/api/v3"         ; APIHOST
+                      "git.undoers.io"               ; WEBHOST and INSTANCE-ID
+                      forge-github-repository)    ; CLASS
+                    forge-alist))
